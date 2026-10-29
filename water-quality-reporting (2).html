@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Water Quality Reporting System for a Village / Ward</title>
+<meta name="description" content="Free web app for villagers to report water contamination, track the fix, and help ward officers manage water quality issues. Works on mobile. English, Hindi, Spanish.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Water Quality Reporting System for a Village / Ward">
+<meta property="og:description" content="Report contaminated water and track resolution status.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Water Quality Reporting System","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","description":"Web app for citizens to report water contamination and track resolution status in a village or ward."}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eef6f8;--card:#fff;--tx:#102a35;--mu:#55717d;--ac:#0b7fa8;--ac2:#dff0f6;--bd:#cfe0e7;--ok:#17855a;--wa:#b86e00;--er:#c23b3b;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1a20;--card:#13262e;--tx:#e6f1f5;--mu:#93aab4;--ac:#4cc0e8;--ac2:#173642;--bd:#254350;--ok:#4cc995;--wa:#f0a63a;--er:#ff7a7a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1a20;--card:#13262e;--tx:#e6f1f5;--mu:#93aab4;--ac:#4cc0e8;--ac2:#173642;--bd:#254350;--ok:#4cc995;--wa:#f0a63a;--er:#ff7a7a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px 16px 48px}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:8px 0 14px}
+h1{font-size:1.5rem;line-height:1.2;margin:0}
+.sub{color:var(--mu);margin:2px 0 0}
+select,input,textarea,button{font:inherit;color:var(--tx)}
+select,input[type=text],textarea{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;background:var(--card)}
+textarea{min-height:90px;resize:vertical}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.lang{width:auto;padding:6px 8px}
+nav{display:flex;gap:4px;background:var(--ac2);padding:4px;border-radius:12px;margin-bottom:16px}
+nav button{flex:1;border:0;background:none;padding:10px 6px;border-radius:9px;cursor:pointer;font-weight:700;color:var(--mu)}
+nav button[aria-current=true]{background:var(--card);color:var(--ac);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+label{display:block;font-weight:700;margin:12px 0 4px}
+label:first-child{margin-top:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+.btn{background:var(--ac);color:#fff;border:0;padding:12px 18px;border-radius:10px;font-weight:700;cursor:pointer}
+:root[data-theme="dark"] .btn,:root:not([data-theme="light"]) .btn{color:#06222c}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .btn{color:#fff}}
+.btn.alt{background:var(--ac2);color:var(--ac)}
+.btn.sm{padding:7px 12px;font-size:.9rem}
+.msg{color:var(--er);font-weight:700;margin:8px 0 0}
+.b{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.82rem;font-weight:700;border:1.5px solid currentColor}
+.b.low,.b.resolved{color:var(--ok)}.b.med,.b.progress,.b.verified{color:var(--wa)}.b.high,.b.reported{color:var(--er)}
+.b.resolved{color:var(--ok)}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.id{font-weight:700;color:var(--ac)}
+.mu{color:var(--mu);font-size:.92rem}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+img.ph{max-width:100%;max-height:180px;border-radius:10px;margin-top:8px;display:block}
+.tl{list-style:none;margin:12px 0 0;padding:0 0 0 22px;border-left:4px solid var(--bd)}
+.tl li{position:relative;padding:0 0 14px 14px;color:var(--mu)}
+.tl li::before{content:"";position:absolute;left:-30px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--bd)}
+.tl li.on{color:var(--tx)}
+.tl li.on::before{background:var(--ac);border-color:var(--ac)}
+.tl li.on:last-child::before,.tl li.fin::before{background:var(--ok);border-color:var(--ok)}
+.tl b{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+@media(max-width:480px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px}
+.stat b{font-size:1.6rem;display:block;line-height:1.1}
+.bar{display:grid;grid-template-columns:130px 1fr 28px;gap:8px;align-items:center;margin:6px 0;font-size:.92rem}
+.bar i{display:block;height:12px;border-radius:6px;background:var(--ac)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.chip{border:1.5px solid var(--bd);background:var(--card);padding:6px 12px;border-radius:99px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:#fff}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--bd)}
+.ctl select{width:auto}.ctl input{flex:1;min-width:140px}
+.sw{display:flex;gap:8px;align-items:center;font-weight:700;margin:0 0 4px}
+.sw input{width:20px;height:20px}
+.fine{color:var(--mu);font-size:.85rem;margin-top:20px}
+</style></head><body>
+<div class="w" id="app"></div>
+<script>
+const L={
+en:{app:'Water quality reporting',sub:'Report contaminated water. Follow the fix.',tabs:['Report','Track','Dashboard'],village:'Village / ward',loc:'Landmark or address',gps:'Add my location',gpsOk:'Location added',gpsErr:'Could not get location. Type a landmark instead.',src:'Water source',issue:'Problem',sev:'Severity',desc:'What did you notice?',photo:'Photo (optional)',name:'Your name (optional)',submit:'Send report',need:'Add the village or ward and a short description.',done:'Report sent',yourId:'Your tracking ID',keep:'Save this ID to follow progress.',view:'See status',find:'Find',idph:'Tracking ID, for example WQ-10241',nf:'No report found with that ID.',recent:'Recent reports',officer:'Ward officer mode',total:'Reports',open:'Open',res:'Resolved',high:'Urgent and open',bytype:'Reports by problem',all:'All',upd:'Update status',note:'Note for residents',hist:'Progress',empty:'No reports yet. Send the first one from the Report tab.',ty:['Color or cloudiness','Bad smell or taste','Particles or insects','Sewage mixing in','Pipe leak','No water supply','Other'],srcs:['Tap','Handpump','Open well','Borewell','Storage tank','River or pond'],sv:['Low','Medium','High'],st:['Reported','Verified','In progress','Resolved'],info:'Demo: reports are saved in this browser only. A live deployment needs a shared database.'},
+hi:{app:'जल गुणवत्ता रिपोर्टिंग',sub:'दूषित पानी की रिपोर्ट करें। समाधान देखें।',tabs:['रिपोर्ट','ट्रैक','डैशबोर्ड'],village:'गाँव / वार्ड',loc:'पहचान स्थल या पता',gps:'मेरा स्थान जोड़ें',gpsOk:'स्थान जुड़ गया',gpsErr:'स्थान नहीं मिला। कोई पहचान स्थल लिखें।',src:'पानी का स्रोत',issue:'समस्या',sev:'गंभीरता',desc:'आपने क्या देखा?',photo:'फ़ोटो (वैकल्पिक)',name:'आपका नाम (वैकल्पिक)',submit:'रिपोर्ट भेजें',need:'गाँव या वार्ड और छोटा विवरण लिखें।',done:'रिपोर्ट भेज दी गई',yourId:'आपकी ट्रैकिंग आईडी',keep:'प्रगति देखने के लिए यह आईडी सँभालकर रखें।',view:'स्थिति देखें',find:'खोजें',idph:'ट्रैकिंग आईडी, जैसे WQ-10241',nf:'इस आईडी की कोई रिपोर्ट नहीं मिली।',recent:'हाल की रिपोर्ट',officer:'वार्ड अधिकारी मोड',total:'रिपोर्ट',open:'खुली',res:'हल हुई',high:'तत्काल और खुली',bytype:'समस्या के अनुसार रिपोर्ट',all:'सभी',upd:'स्थिति बदलें',note:'निवासियों के लिए टिप्पणी',hist:'प्रगति',empty:'अभी कोई रिपोर्ट नहीं। रिपोर्ट टैब से पहली रिपोर्ट भेजें।',ty:['रंग या गदलापन','बदबू या स्वाद','कण या कीड़े','सीवेज मिलना','पाइप रिसाव','पानी की आपूर्ति बंद','अन्य'],srcs:['नल','हैंडपंप','खुला कुआँ','बोरवेल','पानी की टंकी','नदी या तालाब'],sv:['कम','मध्यम','उच्च'],st:['दर्ज','सत्यापित','काम जारी','हल हुई'],info:'डेमो: रिपोर्ट केवल इसी ब्राउज़र में सहेजी जाती हैं। असली उपयोग के लिए साझा डेटाबेस चाहिए।'},
+es:{app:'Calidad del agua',sub:'Reporta agua contaminada. Sigue la solución.',tabs:['Reportar','Seguimiento','Panel'],village:'Aldea / barrio',loc:'Referencia o dirección',gps:'Añadir mi ubicación',gpsOk:'Ubicación añadida',gpsErr:'No se pudo obtener la ubicación. Escribe una referencia.',src:'Fuente de agua',issue:'Problema',sev:'Gravedad',desc:'¿Qué observaste?',photo:'Foto (opcional)',name:'Tu nombre (opcional)',submit:'Enviar reporte',need:'Indica la aldea o barrio y una breve descripción.',done:'Reporte enviado',yourId:'Tu código de seguimiento',keep:'Guarda este código para ver el avance.',view:'Ver estado',find:'Buscar',idph:'Código, por ejemplo WQ-10241',nf:'No hay ningún reporte con ese código.',recent:'Reportes recientes',officer:'Modo responsable',total:'Reportes',open:'Abiertos',res:'Resueltos',high:'Urgentes abiertos',bytype:'Reportes por problema',all:'Todos',upd:'Actualizar estado',note:'Nota para los vecinos',hist:'Avance',empty:'Aún no hay reportes. Envía el primero desde Reportar.',ty:['Color o turbidez','Mal olor o sabor','Partículas o insectos','Aguas residuales','Fuga de tubería','Sin suministro','Otro'],srcs:['Grifo','Bomba manual','Pozo abierto','Pozo perforado','Tanque','Río o estanque'],sv:['Baja','Media','Alta'],st:['Reportado','Verificado','En curso','Resuelto'],info:'Demo: los reportes se guardan solo en este navegador. Un uso real necesita una base de datos compartida.'}};
+const ST=['reported','verified','progress','resolved'],TY=7,SRC=6,SV=['low','med','high'];
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let lang='en',view='report',officer=false,filter='all',photo='',gps=null,gpsMsg='',err='',lastId='',findId='',found=null,store=[],draft={village:'',loc:'',src:0,type:0,sev:1,desc:'',name:''};
+const T=()=>L[lang];
+const cur=r=>r.hist[r.hist.length-1].s;
+const fmt=a=>new Date(a).toLocaleDateString(lang,{day:'numeric',month:'short'});
+const d=n=>Date.now()-n*864e5;
+function load(){try{const r=localStorage.getItem('wq1');if(r)return JSON.parse(r)}catch(e){}return null}
+function save(){try{localStorage.setItem('wq1',JSON.stringify(store))}catch(e){}}
+function seed(){return[
+{id:'WQ-10241',village:'Ward 7, Hosahalli',loc:'Handpump near the temple',src:1,type:0,sev:1,desc:'Brown water since the morning. Children fell sick last week.',hist:[{s:'reported',at:d(6)},{s:'verified',at:d(5),note:'Sample collected for lab test'},{s:'progress',at:d(4),note:'Pipe flushing started'},{s:'resolved',at:d(2),note:'Chlorinated and retested: safe'}]},
+{id:'WQ-10318',village:'Ward 7, Hosahalli',loc:'Community tank, school road',src:4,type:2,sev:2,desc:'Insects and green particles in the storage tank.',hist:[{s:'reported',at:d(3)},{s:'verified',at:d(2),note:'Tank inspection scheduled'}]},
+{id:'WQ-10355',village:'Kiliru Village',loc:'Main tap, bus stop',src:0,type:4,sev:0,desc:'Pipe leaking near the tap, mud mixing in water.',hist:[{s:'reported',at:d(1)}]},
+{id:'WQ-10362',village:'Kiliru Village',loc:'Open well behind market',src:2,type:3,sev:2,desc:'Drain water is entering the well after rain. Strong smell.',hist:[{s:'reported',at:d(1)}]}]}
+store=load()||seed();
+function opts(arr,sel){return arr.map((x,i)=>`<option value="${i}"${i==sel?' selected':''}>${esc(x)}</option>`).join('')}
+function tline(r){const t=T();return`<ol class="tl" aria-label="${esc(t.hist)}">`+ST.map((s,i)=>{const h=[...r.hist].reverse().find(x=>x.s===s);return`<li class="${h?'on':''}${h&&s==='resolved'?' fin':''}"><b>${esc(t.st[i])}</b>${h?`<span class="mu">${fmt(h.at)}${h.note?' · '+esc(h.note):''}</span>`:''}</li>`}).join('')+'</ol>'}
+function card(r,ctl){const t=T(),s=cur(r),si=ST.indexOf(s);
+return`<article class="card"><div class="top"><div><span class="id">${esc(r.id)}</span><div class="mu">${esc(r.village)}${r.loc?' · '+esc(r.loc):''}</div></div><span class="b ${s}">${esc(t.st[si])}</span></div>
+<div class="tags"><span class="b ${SV[r.sev]}">${esc(t.sv[r.sev])}</span><span class="b" style="color:var(--mu)">${esc(t.ty[r.type])}</span><span class="b" style="color:var(--mu)">${esc(t.srcs[r.src])}</span></div>
+<p style="margin:0">${esc(r.desc)}</p>${r.photo?`<img class="ph" alt="" src="${r.photo}">`:''}
+<p class="mu" style="margin:6px 0 0">${fmt(r.hist[0].at)}${r.name?' · '+esc(r.name):''}${r.gps?' · '+r.gps.join(', '):''}</p>
+${ctl==='tl'?tline(r):''}
+${ctl==='off'&&officer?`<div class="ctl"><select id="s-${r.id}" aria-label="${esc(t.upd)}">${opts(t.st,si)}</select><input type="text" id="n-${r.id}" placeholder="${esc(t.note)}"><button class="btn sm" data-a="upd" data-v="${r.id}">${esc(t.upd)}</button></div>`:''}
+${ctl==='off'?`<div style="margin-top:8px"><button class="btn alt sm" data-a="open" data-v="${r.id}">${esc(t.hist)}</button></div>`:''}</article>`}
+function vReport(){const t=T(),D=draft;
+return`${lastId?`<div class="card" role="status"><b>${esc(t.done)}</b><p class="mu" style="margin:4px 0">${esc(t.keep)}</p><p style="font-size:1.5rem;margin:4px 0" class="id">${esc(lastId)}</p><button class="btn alt sm" data-a="open" data-v="${lastId}">${esc(t.view)}</button></div>`:''}
+<div class="card"><label for="f-village">${esc(t.village)}</label><input type="text" id="f-village" data-d="village" value="${esc(D.village)}">
+<label for="f-loc">${esc(t.loc)}</label><input type="text" id="f-loc" data-d="loc" value="${esc(D.loc)}">
+<div style="margin-top:8px"><button class="btn alt sm" data-a="gps" type="button">${esc(t.gps)}</button> <span class="mu">${esc(gps?t.gpsOk+': '+gps.join(', '):gpsMsg)}</span></div>
+<div class="row"><div><label for="f-src">${esc(t.src)}</label><select id="f-src" data-d="src">${opts(t.srcs,D.src)}</select></div>
+<div><label for="f-type">${esc(t.issue)}</label><select id="f-type" data-d="type">${opts(t.ty,D.type)}</select></div></div>
+<label for="f-sev">${esc(t.sev)}</label><select id="f-sev" data-d="sev">${opts(t.sv,D.sev)}</select>
+<label for="f-desc">${esc(t.desc)}</label><textarea id="f-desc" data-d="desc">${esc(D.desc)}</textarea>
+<label for="ph">${esc(t.photo)}</label><input type="file" id="ph" accept="image/*">${photo?`<img class="ph" alt="" src="${photo}">`:''}
+<label for="f-name">${esc(t.name)}</label><input type="text" id="f-name" data-d="name" value="${esc(D.name)}">
+${err?`<p class="msg" role="alert">${esc(err)}</p>`:''}
+<p style="margin:14px 0 0"><button class="btn" data-a="submit">${esc(t.submit)}</button></p></div>`}
+function vTrack(){const t=T();
+return`<div class="card"><div style="display:flex;gap:8px"><input type="text" id="q" aria-label="${esc(t.find)}" placeholder="${esc(t.idph)}" value="${esc(findId)}"><button class="btn" data-a="find">${esc(t.find)}</button></div>
+${found===false?`<p class="msg">${esc(t.nf)}</p>`:''}</div>
+${found?card(found,'tl'):''}
+<h2 style="font-size:1.1rem;margin:16px 0 8px">${esc(t.recent)}</h2>
+${store.slice(0,5).map(r=>`<button class="card" style="width:100%;text-align:left;cursor:pointer" data-a="open" data-v="${r.id}"><span class="id">${esc(r.id)}</span> <span class="b ${cur(r)}">${esc(t.st[ST.indexOf(cur(r))])}</span><div class="mu">${esc(r.village)} · ${esc(t.ty[r.type])}</div></button>`).join('')}`}
+function vBoard(){const t=T(),open=store.filter(r=>cur(r)!=='resolved'),cnt=Array(TY).fill(0);store.forEach(r=>cnt[r.type]++);
+const mx=Math.max(1,...cnt),list=store.filter(r=>filter==='all'||cur(r)===filter);
+return`<label class="sw"><input type="checkbox" data-a="off"${officer?' checked':''}>${esc(t.officer)}</label>
+<div class="stats" style="margin-top:10px"><div class="stat"><b>${store.length}</b>${esc(t.total)}</div><div class="stat"><b>${open.length}</b>${esc(t.open)}</div><div class="stat"><b>${store.length-open.length}</b>${esc(t.res)}</div><div class="stat"><b style="color:var(--er)">${open.filter(r=>r.sev===2).length}</b>${esc(t.high)}</div></div>
+<div class="card"><b>${esc(t.bytype)}</b>${cnt.map((c,i)=>`<div class="bar"><span>${esc(t.ty[i])}</span><span><i style="width:${c/mx*100}%;min-width:${c?4:0}px"></i></span><b>${c}</b></div>`).join('')}</div>
+<div class="chips">${['all',...ST].map((s,i)=>`<button class="chip" data-a="flt" data-v="${s}" aria-pressed="${filter===s}">${esc(i?t.st[i-1]:t.all)}</button>`).join('')}</div>
+${list.length?list.map(r=>card(r,'off')).join(''):`<p class="mu">${esc(t.empty)}</p>`}`}
+function render(){const t=T(),V=[vReport,vTrack,vBoard],names=['report','track','board'];document.documentElement.lang=lang;
+$('#app').innerHTML=`<header><div><h1>💧 ${esc(t.app)}</h1><p class="sub">${esc(t.sub)}</p></div><select class="lang" id="lang" aria-label="Language"><option value="en"${lang=='en'?' selected':''}>English</option><option value="hi"${lang=='hi'?' selected':''}>हिन्दी</option><option value="es"${lang=='es'?' selected':''}>Español</option></select></header>
+<nav>${names.map((n,i)=>`<button data-a="tab" data-v="${n}" aria-current="${view===n}">${esc(t.tabs[i])}</button>`).join('')}</nav>
+${V[names.indexOf(view)]()}<p class="fine">${esc(t.info)}</p>`}
+function tab(v){view=v;err='';render();window.scrollTo(0,0)}
+function openId(id){found=store.find(r=>r.id===id)||false;findId=id;tab('track')}
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.d;if(k)draft[k]=['src','type','sev'].includes(k)?+e.target.value:e.target.value});
+document.addEventListener('change',e=>{
+if(e.target.id==='lang'){lang=e.target.value;render()}
+else if(e.target.dataset.a==='off'){officer=e.target.checked;render()}
+else if(e.target.id==='ph'&&e.target.files[0]){const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,360/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);photo=c.toDataURL('image/jpeg',.7);render()};im.src=fr.result};fr.readAsDataURL(e.target.files[0])}});
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.type==='checkbox')return;const a=el.dataset.a,v=el.dataset.v;
+if(a==='tab')tab(v);
+else if(a==='open')openId(v);
+else if(a==='flt'){filter=v;render()}
+else if(a==='find'){findId=$('#q').value.trim().toUpperCase();found=store.find(r=>r.id===findId)||false;render()}
+else if(a==='gps'){if(!navigator.geolocation){gpsMsg=T().gpsErr;render();return}
+navigator.geolocation.getCurrentPosition(p=>{gps=[+p.coords.latitude.toFixed(4),+p.coords.longitude.toFixed(4)];render()},()=>{gpsMsg=T().gpsErr;render()},{timeout:8000})}
+else if(a==='submit'){if(!draft.village.trim()||!draft.desc.trim()){err=T().need;render();return}
+const id='WQ-'+(10000+Math.floor(Math.random()*89999));
+store.unshift({id,village:draft.village.trim(),loc:draft.loc.trim(),src:draft.src,type:draft.type,sev:draft.sev,desc:draft.desc.trim(),name:draft.name.trim(),gps,photo,hist:[{s:'reported',at:Date.now()}]});
+save();lastId=id;err='';gps=null;gpsMsg='';photo='';draft={village:draft.village,loc:'',src:0,type:0,sev:1,desc:'',name:draft.name};render();window.scrollTo(0,0)}
+else if(a==='upd'){const r=store.find(x=>x.id===v),s=ST[+$('#s-'+v).value],n=$('#n-'+v).value.trim();
+if(s!==cur(r)||n){r.hist.push({s,at:Date.now(),note:n});save()}render()}});
+render();
+</script></body></html>
